@@ -43,7 +43,8 @@ class Scan
     {
         $this->checkFile = __DIR__.'/checks.json';
         $this->patchFiles = array(
-            'ubuntu' => __DIR__ . '/ubuntu-lts.json'
+            'ubuntu' => __DIR__ . '/ubuntu-lts.json',
+            'debian' => __DIR__ . '/debian-releases.json'
         );
     }
 
@@ -94,7 +95,7 @@ class Scan
      */
     public function isPatched()
     {
-        return preg_match('/ubuntu/i', $this->getVersion());
+        return preg_match('/ubuntu|deb/i', $this->getVersion());
     }
 
     /**
