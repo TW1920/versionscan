@@ -349,30 +349,30 @@ class ScanTest extends \PHPUnit_Framework_TestCase
     public function testRunWithCustomPatch() {
         
         $scan = new Scan();
-        $patches = [
-            [
+        $patches = array(
+            array(
                 "release" => "5.4.16-7.el6.1",
-                "patched" => [
+                "patched" => array(
                     "CVE-1234"
-                ]
-            ]
-        ];
-        $checks = [
-            [
+                )
+            )
+        );
+        $checks = array(
+            array(
                 'cveid' => 'CVE-1234',
                 'summary' => 'This is a test',
-                'fixVersions' => [
+                'fixVersions' => array(
                     '5.4.17'
-                ]
-            ],
-            [
+                )
+            ),
+            array(
                 'cveid' => 'CVE-1235',
                 'summary' => 'This is a test',
-                'fixVersions' => [
+                'fixVersions' => array(
                     '5.4.15'
-                ]
-            ]
-        ];
+                )
+            )
+        );
 
         // Ensure that normal patch fails
         $phpVersion = '5.4.16';
