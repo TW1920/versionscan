@@ -81,6 +81,16 @@ class Scan
     }
 
     /**
+     * Over ride our patch files
+     * 
+     * @param array $patchFiles The patch files you wish to use
+     */
+    public function setPatchFiles(array $patchFiles)
+    {
+        $this->patchFiles = $patchFiles;
+    }
+
+    /**
      * Get the current PHP version setting
      *
      * @return string PHP version number
@@ -161,7 +171,7 @@ class Scan
                 }    
             }
         } elseif (is_array($patches)) {
-            $this->addPatches($patches);
+            $this->addPatches('custom', $patches);
         }
     }
 
