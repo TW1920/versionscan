@@ -67,9 +67,16 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Scan::setVersion
      * @covers \Psecio\Versionscan\Scan::getVersion
      * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::addPatches
+     * @covers \Psecio\Versionscan\Patch::__construct
+     * @covers \Psecio\Versionscan\Patch::setData
+     * @covers \Psecio\Versionscan\Patch::getRelease
      * @covers \Psecio\Versionscan\Scan::setChecks
      * @covers \Psecio\Versionscan\Scan::getChecks
      * @covers \Psecio\Versionscan\Scan::runChecks
+     * @covers \Psecio\Versionscan\Scan::getPatches
+     * @covers \Psecio\Versionscan\Scan::isPatched
      * @covers \Psecio\Versionscan\Scan::execute
      */
     public function testSetVersionOnInit()
@@ -92,9 +99,16 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Scan::getVersion
      * @covers \Psecio\Versionscan\Scan::setVersion
      * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::addPatches
+     * @covers \Psecio\Versionscan\Patch::__construct
+     * @covers \Psecio\Versionscan\Patch::setData
+     * @covers \Psecio\Versionscan\Patch::getRelease
      * @covers \Psecio\Versionscan\Scan::setChecks
      * @covers \Psecio\Versionscan\Scan::getChecks
      * @covers \Psecio\Versionscan\Scan::runChecks
+     * @covers \Psecio\Versionscan\Scan::getPatches
+     * @covers \Psecio\Versionscan\Scan::isPatched
      */
     public function testSetDefaultVersionOnInit()
     {
@@ -115,9 +129,16 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Scan::getVersion
      * @covers \Psecio\Versionscan\Scan::setVersion
      * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::addPatches
+     * @covers \Psecio\Versionscan\Patch::__construct
+     * @covers \Psecio\Versionscan\Patch::setData
+     * @covers \Psecio\Versionscan\Patch::getRelease
      * @covers \Psecio\Versionscan\Scan::setChecks
      * @covers \Psecio\Versionscan\Scan::getChecks
      * @covers \Psecio\Versionscan\Scan::runChecks
+     * @covers \Psecio\Versionscan\Scan::getPatches
+     * @covers \Psecio\Versionscan\Scan::isPatched
      * @covers \Psecio\Versionscan\Check::__construct
      * @covers \Psecio\Versionscan\Check::setData
      * @covers \Psecio\Versionscan\Check::getCveId
@@ -153,10 +174,17 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Scan::getVersion
      * @covers \Psecio\Versionscan\Scan::setVersion
      * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::addPatches
+     * @covers \Psecio\Versionscan\Patch::__construct
+     * @covers \Psecio\Versionscan\Patch::setData
+     * @covers \Psecio\Versionscan\Patch::getRelease
      * @covers \Psecio\Versionscan\Scan::setChecks
      * @covers \Psecio\Versionscan\Scan::getChecks
      * @covers \Psecio\Versionscan\Scan::setCheckFile
      * @covers \Psecio\Versionscan\Scan::runChecks
+     * @covers \Psecio\Versionscan\Scan::getPatches
+     * @covers \Psecio\Versionscan\Scan::isPatched
      * @covers \Psecio\Versionscan\Check::__construct
      * @covers \Psecio\Versionscan\Check::setData
      * @covers \Psecio\Versionscan\Check::getCveId
@@ -188,6 +216,11 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Scan::execute
      * @covers \Psecio\Versionscan\Scan::setVersion
      * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::addPatches
+     * @covers \Psecio\Versionscan\Patch::__construct
+     * @covers \Psecio\Versionscan\Patch::setData
+     * @covers \Psecio\Versionscan\Patch::getRelease
      * @covers \Psecio\Versionscan\Scan::setCheckFile
      */
     public function testRunTestsFromMissingFileFail()
@@ -208,6 +241,11 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Scan::execute
      * @covers \Psecio\Versionscan\Scan::setVersion
      * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::addPatches
+     * @covers \Psecio\Versionscan\Patch::__construct
+     * @covers \Psecio\Versionscan\Patch::setData
+     * @covers \Psecio\Versionscan\Patch::getRelease
      * @covers \Psecio\Versionscan\Scan::setCheckFile
      */
     public function testRunTestsFromEmptyFileFail()
@@ -219,5 +257,135 @@ class ScanTest extends \PHPUnit_Framework_TestCase
         $scan->setCheckFile($file);
         $this->setExpectedException('Exception', 'Invalid check configuration');
         $scan->execute($phpVersion);
+    }
+
+    /**
+     * Test that a run fails (with a non-existant patch file)
+     *
+     * @covers \Psecio\Versionscan\Scan::__construct
+     * @covers \Psecio\Versionscan\Scan::setPatchFiles
+     * @covers \Psecio\Versionscan\Scan::execute
+     * @covers \Psecio\Versionscan\Scan::setVersion
+     * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::setChecks
+     * @covers \Psecio\Versionscan\Check::__construct
+     * @covers \Psecio\Versionscan\Check::setData
+     * @covers \Psecio\Versionscan\Check::getCveId
+     * @covers \Psecio\Versionscan\Check::getVersions
+     * @covers \Psecio\Versionscan\Check::setResult
+     * @covers \Psecio\Versionscan\Check::getResult
+     * @covers \Psecio\Versionscan\Check::sortVersions
+     * @covers \Psecio\Versionscan\Check::isVulnerable
+     */
+    public function testRunTestsFromMissingPatchFileFail() {
+        $phpVersion = '5.4.1';
+        $file = __DIR__ . '/invalid_file';
+
+        $scan = new Scan();
+        $scan->setPatchFiles(['invalid_os' => $file]);
+        $this->setExpectedException('Exception', 'Could not load patch file '.$file);
+        $scan->execute($phpVersion);
+    }
+
+    /**
+     * Test that a run fails (with a non-existant patch file)
+     *
+     * @covers \Psecio\Versionscan\Scan::__construct
+     * @covers \Psecio\Versionscan\Scan::setPatchFiles
+     * @covers \Psecio\Versionscan\Scan::execute
+     * @covers \Psecio\Versionscan\Scan::setVersion
+     * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::setChecks
+     * @covers \Psecio\Versionscan\Check::__construct
+     * @covers \Psecio\Versionscan\Check::setData
+     * @covers \Psecio\Versionscan\Check::getCveId
+     * @covers \Psecio\Versionscan\Check::getVersions
+     * @covers \Psecio\Versionscan\Check::setResult
+     * @covers \Psecio\Versionscan\Check::getResult
+     * @covers \Psecio\Versionscan\Check::sortVersions
+     * @covers \Psecio\Versionscan\Check::isVulnerable
+     */
+    public function testRunTestsFromEmptyPatchFileFail() {
+        $phpVersion = '5.4.1';
+        $file = __DIR__ . '/patches-invalid.json';
+
+        $scan = new Scan();
+        $scan->setPatchFiles(['invalid_os' => $file]);
+        $this->setExpectedException('Exception', 'Invalid patch configuration');
+        $scan->execute($phpVersion);
+    }
+
+    /**
+     * Check custom patches properly determine if a version is patched against
+     * a particular vulnerability
+     *
+     * @covers \Psecio\Versionscan\Scan::__construct
+     * @covers \Psecio\Versionscan\Scan::execute
+     * @covers \Psecio\Versionscan\Scan::getVersion
+     * @covers \Psecio\Versionscan\Scan::setVersion
+     * @covers \Psecio\Versionscan\Scan::loadChecks
+     * @covers \Psecio\Versionscan\Scan::loadPatches
+     * @covers \Psecio\Versionscan\Scan::addPatches
+     * @covers \Psecio\Versionscan\Patch::__construct
+     * @covers \Psecio\Versionscan\Patch::setData
+     * @covers \Psecio\Versionscan\Patch::getRelease
+     * @covers \Psecio\Versionscan\Patch::getPatched
+     * @covers \Psecio\Versionscan\Scan::setChecks
+     * @covers \Psecio\Versionscan\Scan::getChecks
+     * @covers \Psecio\Versionscan\Scan::runChecks
+     * @covers \Psecio\Versionscan\Scan::getPatches
+     * @covers \Psecio\Versionscan\Scan::isPatched
+     * @covers \Psecio\Versionscan\Check::__construct
+     * @covers \Psecio\Versionscan\Check::setData
+     * @covers \Psecio\Versionscan\Check::getCveId
+     * @covers \Psecio\Versionscan\Check::getVersions
+     * @covers \Psecio\Versionscan\Check::setResult
+     * @covers \Psecio\Versionscan\Check::getResult
+     * @covers \Psecio\Versionscan\Check::sortVersions
+     * @covers \Psecio\Versionscan\Check::isVulnerable
+     */
+    public function testRunWithCustomPatch() {
+        
+        $scan = new Scan();
+        $patches = [
+            [
+                "release" => "5.4.16-7.el6.1",
+                "patched" => [
+                    "CVE-1234"
+                ]
+            ]
+        ];
+        $checks = [
+            [
+                'cveid' => 'CVE-1234',
+                'summary' => 'This is a test',
+                'fixVersions' => [
+                    '5.4.17'
+                ]
+            ],
+            [
+                'cveid' => 'CVE-1235',
+                'summary' => 'This is a test',
+                'fixVersions' => [
+                    '5.4.15'
+                ]
+            ]
+        ];
+
+        // Ensure that normal patch fails
+        $phpVersion = '5.4.16';
+        $scan->execute($phpVersion, $checks, $patches);
+        $checks = $scan->getChecks();
+        $this->assertTrue($checks[0]->getResult());
+        $this->assertFalse($checks[1]->getResult());
+
+        // And ensure that a patched version passes
+        $phpVersion = '5.4.16-7.el6.1';
+        $scan->execute($phpVersion, $checks, $patches);
+        $checks = $scan->getChecks();
+        $this->assertFalse($checks[0]->getResult());
+        $this->assertFalse($checks[1]->getResult());
     }
 }
