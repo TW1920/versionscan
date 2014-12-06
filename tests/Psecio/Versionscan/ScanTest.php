@@ -283,7 +283,7 @@ class ScanTest extends \PHPUnit_Framework_TestCase
         $file = __DIR__ . '/invalid_file';
 
         $scan = new Scan();
-        $scan->setPatchFiles(['invalid_os' => $file]);
+        $scan->setPatchFiles(array('invalid_os' => $file));
         $this->setExpectedException('Exception', 'Could not load patch file '.$file);
         $scan->execute($phpVersion);
     }
@@ -312,7 +312,7 @@ class ScanTest extends \PHPUnit_Framework_TestCase
         $file = __DIR__ . '/patches-invalid.json';
 
         $scan = new Scan();
-        $scan->setPatchFiles(['invalid_os' => $file]);
+        $scan->setPatchFiles(array('invalid_os' => $file));
         $this->setExpectedException('Exception', 'Invalid patch configuration');
         $scan->execute($phpVersion);
     }
