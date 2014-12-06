@@ -44,7 +44,8 @@ class Scan
         $this->checkFile = __DIR__.'/checks.json';
         $this->patchFiles = array(
             'ubuntu' => __DIR__ . '/ubuntu-lts.json',
-            'debian' => __DIR__ . '/debian-releases.json'
+            'debian' => __DIR__ . '/debian-releases.json',
+            'redhat' => __DIR__ . '/redhat-releases.json'
         );
     }
 
@@ -75,7 +76,8 @@ class Scan
      */
     public function setVersion($version)
     {
-        $this->phpVersion = $version;
+        // We need to remove any prepending php rubbish
+        $this->phpVersion = trim(str_replace('php', '', $version), '-');
     }
 
     /**
@@ -95,7 +97,7 @@ class Scan
      */
     public function isPatched()
     {
-        return preg_match('/ubuntu|deb/i', $this->getVersion());
+        return preg_match('/ubuntu|deb|el\d|stronghold|php-\d\.\d+\.\d+-\d+\.\d+/i', $this->getVersion());
     }
 
     /**
@@ -179,6 +181,16 @@ class Scan
     }
 
     /**
+     * Get the current patch result set
+     *
+     * @return array Patch results
+     */
+    public function getPatches()
+    {
+        return $this->patches;
+    }
+
+    /**
      * Set the results of the check evaluation
      *
      * @param array $checks Set of check evaluation results
@@ -219,7 +231,7 @@ class Scan
         {
             $vuln_patched = array();
             $version_partial = array_shift(explode('-', $this->getVersion()));
-            foreach ($this->patches as $set => $patches) {
+            foreach ($this->getPatches() as $set => $patches) {
                 // Check each patch set
                 $found = false;
                 foreach ($patches as $version => $patch) {

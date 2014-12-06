@@ -95,10 +95,13 @@ class ScanCommand extends Command
         $table->setRows($data);
         $table->render($output);
 
+        $patchCount = array_reduce($scan->getPatches(), function(&$count, $set) { return $count + count($set); }, 0);
+
         $output->writeLn(
             "\nScan complete\n"
             .str_repeat('-', 20)."\n"
             ."Total checks: ".count($scan->getChecks())."\n"
+            ."Total patches: ".$patchCount." (".implode(", ", array_keys($scan->getPatches())).")\n"
             ."<fg=red>Failures: ".$failedCount."</fg=red>\n"
         );
     }
