@@ -281,13 +281,12 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Check::isVulnerable
      */
     public function testRunTestsFromMissingPatchFileFail() {
-        $phpVersion = '5.4.1';
         $file = __DIR__ . '/invalid_file';
 
         $scan = new Scan();
         $scan->setPatchFiles(array('invalid_os' => $file));
         $this->setExpectedException('Exception', 'Could not load patch file '.$file);
-        $scan->execute($phpVersion);
+        $scan->loadPatches();
     }
 
     /**
@@ -310,13 +309,12 @@ class ScanTest extends \PHPUnit_Framework_TestCase
      * @covers \Psecio\Versionscan\Check::isVulnerable
      */
     public function testRunTestsFromEmptyPatchFileFail() {
-        $phpVersion = '5.4.1';
         $file = __DIR__ . '/patches-invalid.json';
 
         $scan = new Scan();
         $scan->setPatchFiles(array('invalid_os' => $file));
         $this->setExpectedException('Exception', 'Invalid patch configuration');
-        $scan->execute($phpVersion);
+        $scan->loadPatches();
     }
 
     /**
@@ -363,15 +361,15 @@ class ScanTest extends \PHPUnit_Framework_TestCase
             array(
                 'cveid' => 'CVE-1234',
                 'summary' => 'This is a test',
-                'fixVersions' => array(
-                    '5.4.17'
+                'fixVersions' => (object)array(
+                    'base' => array('5.4.17')
                 )
             ),
             array(
                 'cveid' => 'CVE-1235',
                 'summary' => 'This is a test',
-                'fixVersions' => array(
-                    '5.4.15'
+                'fixVersions' => (object)array(
+                    'base' => array('5.4.15')
                 )
             )
         );
