@@ -240,7 +240,9 @@ class Scan
         if ($this->isPatched())
         {
             $vuln_patched = array();
-            $version_partial = array_shift(explode('-', $this->getVersion()));
+            $parts = explode('-', $this->getVersion());
+            $version_partial = array_shift($parts);
+
             foreach ($this->getPatches() as $set => $patches) {
                 // Check each patch set
                 $found = false;
@@ -250,7 +252,8 @@ class Scan
                         $found = true;
                     }
 
-                    $partial = array_shift(explode('-', $version));
+                    $parts = explode('-', $version);
+                    $partial = array_shift($parts);
                     if ($found && $partial == $version_partial) {
                         $vuln_patched = array_merge($vuln_patched, $patch->getPatched());
                     }
